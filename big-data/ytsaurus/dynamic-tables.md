@@ -11,10 +11,11 @@ NoSQL-слой YTsaurus: как хранить и обслуживать дан�
 - **Tablet node** — узел, на котором физически исполняется tablet cell: держит "горячие" данные в памяти и периодически сбрасывает (flush) их в chunk'и на диске.
 - **Sorted dynamic table** — dynamic table, упорядоченная по ключу; поддерживает lookup по ключу и range-запросы, аналогична распределённой отсортированной key-value таблице (как Bigtable/HBase).
 - **Ordered dynamic table** — dynamic table без сортировки, запись только в конец (append-only log), строки адресуются по порядковому номеру — используется как очередь/лог, а не key-value хранилище. Построение pub/sub-очереди с несколькими независимыми читателями поверх такой таблицы — см. [queues.md](queues.md).
+- **Pivot key** — граница диапазона ключей между соседними tablets sorted dynamic table. Список pivot keys, переданный команде `reshard-table`, определяет, сколько получится tablets и где проходят границы их диапазонов.
 
 ## Как это работает
 
-1. При создании dynamic table задаётся схема и (для sorted) ключевые колонки; таблица делится на tablets по диапазонам ключей.
+1. При создании dynamic table задаётся [схема](architecture.md) и (для sorted) ключевые колонки (`sort_order=ascending`). Если не указать число tablets явно (атрибут `tablet_count`), таблица создаётся с одним tablet на весь диапазон ключей — разбить его на несколько позже можно командой `reshard-table`.
 2. Каждый tablet назначается на tablet cell; несколько tablets могут обслуживаться одной cell, а одна большая таблица — множеством cells на разных tablet node.
 3. Запись (insert/update) сначала попадает в память tablet node и в write-ahead log — журнал на диске для восстановления при падении узла до того, как данные сброшены в chunk.
 4. Периодически данные из памяти сбрасываются (flush) в неизменяемый chunk на диске; фоновый процесс compaction объединяет chunk'и, чтобы чтение оставалось эффективным.
@@ -37,15 +38,4 @@ NoSQL-слой YTsaurus: как хранить и обслуживать дан�
 
 ## Примеры использования
 
-```bash
-# создать sorted dynamic table со схемой и ключом
-yt create table //home/project/users_dynamic --attributes \
-  '{dynamic=%true; schema=[{name=user_id;type=int64;sort_order=ascending};{name=name;type=string}]}'
-
-# смонтировать таблицу, чтобы tablet cells начали её обслуживать
-yt mount-table //home/project/users_dynamic
-
-# точечная запись и чтение по ключу
-yt insert-rows //home/project/users_dynamic '[{"user_id": 42, "name": "alice"}]' --format json
-yt select-rows "* from [//home/project/users_dynamic] where user_id = 42"
-```
+Создание sorted dynamic table со схемой и tablets, монтирование, `insert-rows`/`select-rows` и ручной `reshard-table` по pivot keys — команды собраны в разделе [«Dynamic tables» в cli.md](cli.md#dynamic-tables).

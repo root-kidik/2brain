@@ -44,19 +44,7 @@ Producer ──► Queue (ordered dynamic table)
 
 ## Примеры использования
 
-```bash
-# создать ordered dynamic table и использовать её как очередь
-yt create table //home/project/events_queue --attributes '{dynamic=%true; schema=[{name=payload;type=string}]}'
-yt mount-table //home/project/events_queue
-
-# создать объект consumer и зарегистрировать его на очередь
-yt create queue_consumer //home/project/events_queue_consumer_billing
-yt mount-table //home/project/events_queue_consumer_billing
-yt register-queue-consumer //home/project/events_queue //home/project/events_queue_consumer_billing --vital
-
-# записать строки в очередь (обычная запись в ordered dynamic table)
-yt insert-rows //home/project/events_queue '[{"payload": "order-created"}]' --format json
-```
+Создание очереди, регистрация consumer'а (`register-queue-consumer`) и запись строк через CLI — команды собраны в разделе [«Очереди» в cli.md](cli.md#очереди).
 
 ```python
 # Python SDK: consumer читает свою позицию и продвигает её после обработки

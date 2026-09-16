@@ -18,15 +18,7 @@
 
 ## Примеры использования
 
-```bash
-# SQL-запрос к таблице через YQL
-yql -s <cluster> -e "SELECT user_id, count(*) FROM \`//home/project/orders\` GROUP BY user_id"
-
-# поднять CHYT clique и выполнить запрос через clickhouse-client
-yt clickhouse start-clique --instance-count 5 --alias ch_project
-clickhouse-client --host <proxy> --port 8123 --query \
-  "SELECT count(*) FROM \"//home/project/orders\""
-```
+Запрос через YQL и запуск CHYT clique — команды собраны в разделе [«CHYT и YQL» в cli.md](cli.md#chyt-и-yql).
 
 ```python
 # Python SDK: чтение таблицы без CLI

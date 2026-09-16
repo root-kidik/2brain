@@ -48,23 +48,4 @@ Pool'ы "team-a" и "team-b" получают гарантированную д�
 
 ## Примеры использования
 
-```bash
-# Map: применить скрипт к каждой строке независимо
-yt map "python3 process.py" \
-  --src //home/project/orders \
-  --dst //home/project/orders_processed
-
-# Sort по ключу перед Reduce
-yt sort --src //home/project/orders_processed \
-  --dst //home/project/orders_sorted \
-  --sort-by "user_id"
-
-# MapReduce: map + группировка по ключу + reduce за один запуск
-yt map-reduce \
-  --mapper "python3 mapper.py" \
-  --reducer "python3 reducer.py" \
-  --map-output-table //tmp/intermediate \
-  --reduce-by "user_id" \
-  --src //home/project/orders \
-  --dst //home/project/orders_by_user
-```
+Запуск Map/Sort/MapReduce через CLI — команды `yt map`/`sort`/`map-reduce` собраны в разделе [«Операции (Map/Sort/MapReduce)» в cli.md](cli.md#операции-mapsortmapreduce).

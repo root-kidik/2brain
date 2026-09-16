@@ -11,6 +11,7 @@
 - **Exec node** — узел, на котором выполняются jobs вычислительных операций (см. [computation.md](computation.md)). Часто data node и exec node — одна и та же машина, чтобы job мог читать chunk с локального диска (data locality).
 - **Replication factor (RF)** — сколько копий chunk'а хранится на разных data node. Для "горячих" таблиц типичное значение — 3.
 - **Erasure coding** — альтернатива полной репликации: chunk делится на data-части и parity-части (схема вроде Рида-Соломона), что снижает overhead хранения (условно ~1.5x против 3x при RF=3) ценой более дорогого восстановления данных при потере узла.
+- **Schema** — список колонок таблицы (имя + тип), опционально описывающий структуру строк. У static table схема необязательна: без неё таблица "слабо типизирована" — можно писать строки с произвольным набором колонок. У dynamic table схема обязательна, а часть колонок помечается как ключевые (`sort_order=ascending`) — по ним таблица физически сортируется и делится на tablets (см. [dynamic-tables.md](dynamic-tables.md)).
 
 ## Как это работает
 
@@ -50,15 +51,4 @@ RF=3 означает, что каждый chunk хранится на 3 из 4 
 
 ## Примеры использования
 
-```bash
-# создать таблицу с явным replication factor
-yt create table //home/project/orders --attributes '{replication_factor=3}'
-
-# записать данные построчно (JSON) в таблицу
-echo '{"name": "alice", "amount": 100}
-{"name": "bob", "amount": 200}' | yt write-table //home/project/orders --format json
-
-# посмотреть, из скольких chunk'ов состоит таблица и её атрибуты хранения
-yt get //home/project/orders/@chunk_count
-yt get //home/project/orders/@replication_factor
-```
+Создание таблицы со схемой и replication factor, запись в неё и просмотр атрибутов хранения — команды `yt create table`/`write-table`/`get` собраны в разделе [«Static tables» в cli.md](cli.md#static-tables).
