@@ -18,6 +18,7 @@
 - [architecture.md](architecture.md) — устройство хранения: master и Cypress, chunk'и и их репликация/erasure coding, роли data node/exec node.
 - [computation.md](computation.md) — batch-вычисления: операции Map/Reduce/MapReduce/Sort, scheduler и fair-share pools, data locality.
 - [dynamic-tables.md](dynamic-tables.md) — NoSQL-слой: tablets, tablet cells, sorted/ordered dynamic tables как OLTP/serving хранилище.
+- [queues.md](queues.md) — pub/sub-очереди поверх ordered dynamic table: consumer'ы, offset (row index), trim/retention, идемпотентная запись.
 - [ecosystem.md](ecosystem.md) — доступ к данным поверх низкоуровневого API: YQL, CHYT (ClickHouse over YTsaurus), SPYT (Spark over YTsaurus), CLI/SDK.
 
 ## Плюсы
