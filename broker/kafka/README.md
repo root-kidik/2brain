@@ -26,8 +26,11 @@ kafka-console-producer.sh --topic orders --bootstrap-server localhost:9092
 kafka-console-consumer.sh --topic orders --from-beginning --bootstrap-server localhost:9092
 ```
 
+Подробнее про флаги и режимы этих консольных утилит — в [console-tools.md](console-tools.md).
+
 ## Разделы
 
+- [console-tools.md](console-tools.md) — как пользоваться `kafka-console-producer.sh`/`kafka-console-consumer.sh`: отправка/чтение сообщений, ключи, consumer group, вывод метаданных.
 - [partitions-and-replication.md](partitions-and-replication.md) — устройство партиций, репликация (Replication Factor, Leader/Follower, ISR), сегменты и retention/compaction, настройка `acks`, влияние числа партиций на параллелизм.
 - [delivery-semantics.md](delivery-semantics.md) — гарантии доставки: at most once / at least once / exactly once, идемпотентный producer, транзакции, паттерн outbox.
 - [kraft.md](kraft.md) — метаданные кластера и лидер-выборы: KRaft vs ZooKeeper, роль controller'а.
