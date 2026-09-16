@@ -15,6 +15,7 @@
 
 ## Разделы
 
+- [cli.md](cli.md) — как пользоваться `yt` CLI: установка, настройка подключения к кластеру (proxy/token), базовые команды навигации по Cypress.
 - [architecture.md](architecture.md) — устройство хранения: master и Cypress, chunk'и и их репликация/erasure coding, роли data node/exec node.
 - [computation.md](computation.md) — batch-вычисления: операции Map/Reduce/MapReduce/Sort, scheduler и fair-share pools, data locality.
 - [dynamic-tables.md](dynamic-tables.md) — NoSQL-слой: tablets, tablet cells, sorted/ordered dynamic tables как OLTP/serving хранилище.

@@ -8,7 +8,7 @@
 - **CHYT** ("ClickHouse over YTsaurus") — интеграция ClickHouse с YTsaurus: движок ClickHouse запускается как долгоживущая операция (clique) на exec node'ах кластера и читает/пишет таблицы YTsaurus напрямую, давая быстрый ad-hoc SQL без выгрузки данных наружу.
 - **Clique** — набор процессов ClickHouse, запущенных как одна CHYT-операция; клиент подключается к clique как к обычному ClickHouse-серверу по протоколу ClickHouse.
 - **SPYT** ("Spark over YTsaurus") — интеграция Apache Spark: Spark executors запускаются как jobs YTsaurus-операции, а Spark читает/пишет таблицы YTsaurus через отдельный коннектор вместо HDFS/S3.
-- **`yt` CLI / SDK** — консольная утилита и клиентские библиотеки (Python, Java, Go, C++) для работы с Cypress, static/dynamic таблицами и запуска операций программно, без ClickHouse/Spark/YQL.
+- **`yt` CLI / SDK** — консольная утилита и клиентские библиотеки (Python, Java, Go, C++) для работы с Cypress, static/dynamic таблицами и запуска операций программно, без ClickHouse/Spark/YQL. Установка, настройка подключения к кластеру и базовые команды — в [cli.md](cli.md).
 
 ## Как это работает
 
