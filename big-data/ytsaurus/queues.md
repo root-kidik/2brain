@@ -37,11 +37,6 @@ Producer ──► Queue (ordered dynamic table)
                                   └─► Consumer "analytics"  (свой row index на P1)
 ```
 
-## Особенности/trade-offs
-
-- В Kafka offset consumer group появляется автоматически при первом чтении под этим `group.id`. В YTsaurus consumer — явный объект в Cypress, который нужно создать и зарегистрировать за очередью заранее — чуть больше ручной настройки, но зато consumer управляется как обычный объект (права доступа через ACL Cypress, отдельный мониторинг lag через queue agent).
-- Очередь — это тот же dynamic table, поэтому параллелизм чтения ограничен заранее заданным числом tablets (partitions), как и у обычных dynamic tables (см. [dynamic-tables.md](dynamic-tables.md)) — увеличить его на лету так же нетривиально, как реshardинг обычной dynamic table.
-
 ## Примеры использования
 
 Создание очереди, регистрация consumer'а (`register-queue-consumer`) и запись строк через CLI — команды собраны в разделе [«Очереди» в cli.md](cli.md#очереди).
@@ -68,3 +63,8 @@ yt.advance_consumer(
     new_offset=1040 + len(rows),
 )
 ```
+
+## Особенности/trade-offs
+
+- В Kafka offset consumer group появляется автоматически при первом чтении под этим `group.id`. В YTsaurus consumer — явный объект в Cypress, который нужно создать и зарегистрировать за очередью заранее — чуть больше ручной настройки, но зато consumer управляется как обычный объект (права доступа через ACL Cypress, отдельный мониторинг lag через queue agent).
+- Очередь — это тот же dynamic table, поэтому параллелизм чтения ограничен заранее заданным числом tablets (partitions), как и у обычных dynamic tables (см. [dynamic-tables.md](dynamic-tables.md)) — увеличить его на лету так же нетривиально, как реshardинг обычной dynamic table.

@@ -15,6 +15,7 @@
 - **kafka-console-producer.sh** — консольная утилита-producer: читает строки со stdin (или из файла) и отправляет каждую строку как отдельное сообщение в указанный топик.
 - **kafka-console-consumer.sh** — консольная утилита-consumer: подписывается на топик и печатает прочитанные сообщения в stdout.
 - **`--property`** — общий флаг обеих утилит для настройки формата ввода/вывода сообщений (например, разбор ключа у producer'а или печать метаданных у consumer'а), без изменения кода.
+- **`--producer.config`/`--consumer.config`** — флаг producer- и consumer-утилиты соответственно, указывающий на properties-файл с настройками подключения, которые не умещаются в отдельные флаги — в первую очередь аутентификация (SASL, SSL) для защищённых кластеров.
 
 ## Как это работает
 
@@ -58,6 +59,22 @@ kafka-console-consumer.sh --topic orders --from-beginning --max-messages 5 --boo
 ```
 
 Без `--group` каждый запуск `kafka-console-consumer.sh` создаёт новую consumer group со случайным именем: offset нигде осмысленно не сохраняется, и повторный запуск без `--from-beginning` начнёт читать только новые сообщения (с `latest`), а не продолжит с прошлого места.
+
+### Подключение к кластеру с аутентификацией
+
+`--bootstrap-server` в примерах выше подходит для локального кластера без аутентификации. Для защищённого кластера (SASL/SSL) настройки подключения выносятся в отдельный properties-файл и передаются флагом `--consumer.config` (у producer-утилиты — `--producer.config`):
+
+```properties
+# client.properties
+security.protocol=SASL_SSL
+sasl.mechanism=PLAIN
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username="user" password="pass";
+```
+
+```bash
+kafka-console-consumer.sh --topic orders --bootstrap-server broker1.example.com:9093 \
+  --consumer.config client.properties
+```
 
 ## Особенности/trade-offs
 
